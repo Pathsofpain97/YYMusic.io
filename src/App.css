@@ -1,4 +1,4 @@
-/* src/index.css o src/App.css */
+/* src/App.css */
 :root {
     --xp-blue: #0055E1; /* Azul de barra de título */
     --xp-blue-gradient-start: #0443AE;
@@ -12,39 +12,56 @@
     --xp-light-grey-border: #B5B5B5;
     --xp-highlight-blue: #316AC5;
     --xp-highlight-text: white;
-  }
-  
-  body {
+}
+
+body {
     font-family: var(--xp-font);
-    background-color: #3A6EA5; /* Fondo escritorio XP (opcional) */
+    background-color: #3A6EA5; /* Fondo escritorio XP */
     margin: 0;
-    padding: 20px; /* Añade algo de espacio */
+    padding: 10px; /* Reducimos padding para móviles */
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Alinea arriba */
+    align-items: flex-start;
     min-height: 100vh;
-  }
-  
-  /* Estilos generales para botones si no se usa módulo para todos */
-  .xp-button-general {
-      background-color: var(--xp-button-bg);
-      border: 1px solid var(--xp-button-border);
-      border-radius: 3px;
-      padding: 5px 15px;
-      cursor: pointer;
-      font-family: var(--xp-font);
-      font-size: 12px;
-      min-width: 75px;
-      height: 23px; /* Altura típica XP */
-      text-align: center;
-      box-sizing: border-box;
-  }
-  
-  .xp-button-general:hover {
-      border-color: #1C65B2;
-  }
-  .xp-button-general:active {
-      background-color: #E1E1E1;
-      border-style: inset;
-      padding: 6px 14px 4px 16px; /* Simular hundido */
-  }
+    overflow-x: hidden; /* Evita desbordamiento horizontal */
+}
+
+/* Estilos generales para botones */
+.xp-button-general {
+    background-color: var(--xp-button-bg);
+    border: 1px solid var(--xp-button-border);
+    border-radius: 3px;
+    padding: 8px 20px; /* Aumentamos padding para mejor toque */
+    cursor: pointer;
+    font-family: var(--xp-font);
+    font-size: 14px; /* Ligeramente más grande para móviles */
+    min-width: 80px;
+    height: 32px; /* Más alto para mejor interacción táctil */
+    text-align: center;
+    box-sizing: border-box;
+    touch-action: manipulation; /* Mejora interacción táctil */
+}
+
+.xp-button-general:hover {
+    border-color: #1C65B2;
+}
+
+.xp-button-general:active {
+    background-color: #E1E1E1;
+    border-style: inset;
+    padding: 9px 19px 7px 21px; /* Simular hundido */
+}
+
+/* Media queries para pantallas pequeñas */
+@media (max-width: 768px) {
+    body {
+        padding: 5px; /* Menos espacio en móviles */
+    }
+
+    .xp-button-general {
+        font-size: 12px;
+        min-width: 60px;
+        height: 28px;
+        padding: 6px 15px;
+    }
+}

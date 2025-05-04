@@ -1,126 +1,142 @@
 .playlistSection {
-    flex: 1; /* Ocupa espacio disponible */
-    border: 1px solid var(--xp-dark-grey-border);
-    padding: 8px;
-    background-color: white; /* Fondo blanco para la lista */
-    min-height: 200px; /* Altura mínima */
-    display: flex;
-    flex-direction: column; /* Organiza título, lista y botón verticalmente */
-    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2); /* Sombra interior */
+  flex: 1;
+  border: 1px solid var(--xp-dark-grey-border);
+  padding: 8px;
+  background-color: white;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.playlistTitle {
+  margin: 0 0 5px 0;
+  font-size: 13px;
+  color: #333;
+}
+
+.playlist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  flex-grow: 1;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--xp-light-grey-border);
+  background-color: #FFFFFF;
+}
+
+.playlistItem {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee comb;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  justify-content: space-between;
+}
+
+.playlistItem:last-child {
+  border-bottom: none;
+}
+
+.playlistItem:hover {
+  background-color: #E8F0FD;
+}
+
+.playlistItem.playing {
+  background-color: var(--xp-highlight-blue);
+  color: var(--xp-highlight-text);
+  font-weight: bold;
+}
+
+.emptyPlaylist {
+  padding: 10px 8px;
+  font-style: italic;
+  color: #777;
+  font-size: 12px;
+}
+
+.loadButton {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.playlist::-webkit-scrollbar {
+  width: 16px;
+}
+
+.playlist::-webkit-scrollbar-track {
+  background: var(--xp-window-bg);
+  border: 1px solid var(--xp-light-grey-border);
+}
+
+.playlist::-webkit-scrollbar-thumb {
+  background-color: #C1C1C1;
+  border: 1px solid var(--xp-dark-grey-border);
+  border-radius: 3px;
+}
+
+.playlist::-webkit-scrollbar-thumb:hover {
+  background-color: #A8A8A8;
+}
+
+.trackInfo {
+  flex-grow: 1;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: #cc0000;
+  font-weight: bold;
+  font-size: 0.8em;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.removeButton:hover {
+  color: #ff0000;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .playlistSection {
+      min-height: 120px;
   }
-  
-  .playlistTitle {
-      margin: 0 0 5px 0;
-      font-size: 13px;
-      color: #333;
-  }
-  
+
   .playlist {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 10px 0; /* Espacio antes del botón */
-    flex-grow: 1; /* Ocupa el espacio vertical restante */
-    max-height: 250px; /* Altura máxima antes de scroll */
-    overflow-y: auto; /* Scroll si la lista es larga */
-    border: 1px solid var(--xp-light-grey-border);
-    background-color: #FFFFFF; /* Asegura fondo blanco */
+      max-height: 150px;
   }
-  
+
   .playlistItem {
-    padding: 4px 8px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee; /* Separador muy sutil */
-    font-size: 12px;
-    white-space: nowrap; /* Evita que el texto salte de línea */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Añade '...' si el texto es muy largo */
-    user-select: none; /* Evita seleccionar texto al hacer clic */
+      font-size: 11px;
+      padding: 3px 6px;
   }
-  .playlistItem:last-child {
-      border-bottom: none;
-  }
-  
-  .playlistItem:hover {
-    background-color: #E8F0FD; /* Azul muy claro al pasar el mouse */
-  }
-  
-  .playlistItem.playing {
-    background-color: var(--xp-highlight-blue); /* Azul de selección XP */
-    color: var(--xp-highlight-text);
-    font-weight: bold;
-  }
-  
-  .emptyPlaylist {
-      padding: 10px 8px;
-      font-style: italic;
-      color: #777;
-      font-size: 12px;
-  }
-  
-  .loadButton {
-    align-self: flex-start; /* Alinea el botón a la izquierda */
-    margin-top: auto; /* Empuja el botón hacia abajo */
-  }
-  
-  /* Estilos para la barra de scroll (WebKit - Chrome/Safari/Edge) */
-  .playlist::-webkit-scrollbar {
-    width: 16px; /* Ancho similar a XP */
-  }
-  .playlist::-webkit-scrollbar-track {
-    background: var(--xp-window-bg); /* Fondo del track */
-     border: 1px solid var(--xp-light-grey-border);
-  }
-  .playlist::-webkit-scrollbar-thumb {
-    background-color: #C1C1C1; /* Color del pulgar */
-    border: 1px solid var(--xp-dark-grey-border);
-    border-radius: 3px;
-  }
-  .playlist::-webkit-scrollbar-thumb:hover {
-    background-color: #A8A8A8;
-  }
-  
-  .playlistItem {
-    display: flex; /* Para alinear el nombre y el botón de eliminar */
-    align-items: center; /* Centrar verticalmente */
-    padding: 4px 8px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee; /* Separador muy sutil */
-    font-size: 12px;
-    white-space: nowrap; /* Evita que el texto salte de línea */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Añade '...' si el texto es muy largo */
-    user-select: none; /* Evita seleccionar texto al hacer clic */
-    justify-content: space-between; /* Espacio entre nombre y botón */
-  }
-  
+
   .trackInfo {
-    flex-grow: 1; /* El nombre de la canción ocupa la mayor parte del espacio */
-    border: none;
-    background: none;
-    text-align: left;
-    cursor: pointer;
-    padding: 0;
-    margin-right: 10px; /* Espacio entre el nombre y el botón */
-    white-space: nowrap; /* Evitar que el texto se rompa */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Mostrar "..." si el nombre es demasiado largo */
+      margin-right: 8px;
   }
-  
+
   .removeButton {
-    background: none;
-    border: none;
-    color: #cc0000;
-    font-weight: bold;
-    font-size: 0.8em; /* Un poco más pequeño que el texto */
-    cursor: pointer;
-    padding: 0;
-    margin-left: 10px; /* Espacio a la izquierda del botón */
-    line-height: 1; /* Para que la "X" esté bien centrada verticalmente */
-    opacity: 0.7; /* Un poco de transparencia para no distraer */
-    transition: opacity 0.2s ease-in-out; /* Transición suave al pasar el mouse */
+      margin-left: 8px;
+      font-size: 0.7em;
   }
-  
-  .removeButton:hover {
-    color: #ff0000;
-    opacity: 1;
-  }
+}

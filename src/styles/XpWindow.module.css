@@ -1,17 +1,16 @@
 .xpWindow {
-  min-width: 600px; /* Ancho mínimo */
-  /* Considera eliminar o aumentar el ancho máximo si necesitas más flexibilidad */
-  max-width: none; /* Eliminamos el ancho máximo para que crezca según el contenido */
+  width: 90vw; /* Usa el 90% del ancho de la pantalla */
+  min-width: 300px; /* Ancho mínimo para móviles */
+  max-width: 800px; /* Limita el ancho máximo en escritorios */
   border: 1px solid var(--xp-blue);
   box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
   background-color: var(--xp-window-bg);
   border-radius: 6px 6px 0 0;
-  overflow: auto; /* Cambiamos a 'auto' para que aparezca scroll si el contenido excede */
-  margin: 20px; /* Espacio alrededor */
-  display: flex; /* Usamos flexbox para controlar el diseño interno */
-  flex-direction: column; /* Organizamos el contenido verticalmente (título, cuerpo, status) */
-  /* Ajusta la altura mínima según la cantidad de contenido que esperas */
-  min-height: 400px; /* Aumentamos la altura mínima */
+  overflow: auto;
+  margin: 10px auto; /* Centrado con menos margen */
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
 }
 
 /* --- Title Bar --- */
@@ -20,15 +19,15 @@
   color: white;
   padding: 3px 5px 3px 10px;
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 1.2rem; /* Ligeramente más pequeño */
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-radius: 5px 5px 0 0;
-  cursor: default; /* Simular arrastre (aunque no funcional aquí) */
+  cursor: default;
   height: 25px;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-  flex-shrink: 0; /* Evita que la barra de título se encoja */
+  flex-shrink: 0;
 }
 
 .title {
@@ -43,7 +42,7 @@
 }
 
 .controlButton {
-  background-color: var(--xp-window-bg); /* Fondo gris claro */
+  background-color: var(--xp-window-bg);
   border: 1px solid var(--xp-button-border);
   border-radius: 3px;
   width: 20px;
@@ -51,45 +50,49 @@
   margin-left: 3px;
   font-size: 12px;
   font-weight: bold;
-  line-height: 18px; /* Centrar verticalmente */
+  line-height: 18px;
   text-align: center;
-  cursor: default; /* No funcionales */
+  cursor: default;
   color: black;
   padding: 0;
   box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
 }
+
 .controlButton:hover {
-  filter: brightness(1.1); /* Ligeramente más brillante */
+  filter: brightness(1.1);
 }
+
 .controlButton:active {
   filter: brightness(0.9);
   border-style: inset;
 }
 
 .closeButton {
-  background-color: #E81123; /* Rojo de cerrar */
+  background-color: #E81123;
   color: white;
   font-weight: bold;
 }
+
 .closeButton:hover {
   background-color: #F1707A;
 }
+
 .closeButton:active {
   background-color: #B70F1A;
 }
 
-
 /* --- Window Body --- */
 .windowBody {
   padding: 10px;
-  border-top: 1px solid #74A6E8; /* Línea azul clara debajo de la barra de título */
-  flex-grow: 1; /* Permite que el cuerpo crezca y ocupe el espacio disponible */
-  display: flex; /* Para controlar la disposición de Playlist y el reproductor */
-  gap: 15px; /* Espacio entre Playlist y el reproductor */
-  overflow: auto; /* Agregamos scroll al cuerpo si el contenido interno lo necesita */
+  border-top: 1px solid #74A6E8;
+  flex-grow: 1;
+  display: flex;
+  gap: 10px;
+  overflow: auto;
+  flex-direction: row; /* Por defecto en escritorio */
 }
 
-/* --- Status Bar (Example) --- */
+/* --- Status Bar --- */
 .statusBar {
   background-color: #F0F0F0;
   border-top: 1px solid var(--xp-light-grey-border);
@@ -99,5 +102,31 @@
   text-align: left;
   height: 20px;
   box-sizing: border-box;
-  flex-shrink: 0; /* Evita que la barra de estado se encoja */
+  flex-shrink: 0;
+}
+
+/* Media queries para pantallas pequeñas */
+@media (max-width: 768px) {
+  .xpWindow {
+      width: 95vw;
+      min-width: 280px;
+      margin: 5px auto;
+      min-height: auto; /* Permite que crezca según contenido */
+  }
+
+  .windowBody {
+      flex-direction: column; /* Apila Playlist y controles verticalmente */
+      gap: 5px;
+  }
+
+  .titleBar {
+      font-size: 1rem;
+      height: 22px;
+  }
+
+  .controlButton {
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+  }
 }

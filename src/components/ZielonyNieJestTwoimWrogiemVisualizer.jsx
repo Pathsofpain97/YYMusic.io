@@ -9,7 +9,7 @@ function ZielonyNieJestTwoimWrogiemVisualizer({ audioRef }) {
     let audioContext;
     let analyser;
     let source;
-    let dataArray; // Datos de audio para analizar
+    let dataArray;
 
     if (audio && canvas) {
       const canvasCtx = canvas.getContext('2d');
@@ -20,7 +20,6 @@ function ZielonyNieJestTwoimWrogiemVisualizer({ audioRef }) {
       const visualize = () => {
         if (!analyser) return;
 
-        // Obtener datos de la forma de onda
         analyser.getByteTimeDomainData(dataArray);
 
         canvasCtx.clearRect(0, 0, width, height);
@@ -30,10 +29,8 @@ function ZielonyNieJestTwoimWrogiemVisualizer({ audioRef }) {
 
         for (let i = 0; i < width; i++) {
           const index = Math.floor(i * dataArray.length / width);
-          // Normalizar el valor de la forma de onda al rango [-1, 1]
           const normalizedValue = (dataArray[index] - 128) / 128.0;
-          // Calcular el desplazamiento vertical de la onda basado en el valor normalizado
-          const y = centerY + normalizedValue * 80; // Ajusta el factor 80 para la amplitud
+          const y = centerY + normalizedValue * 80;
 
           if (i === 0) {
             canvasCtx.moveTo(i, y);
@@ -79,9 +76,9 @@ function ZielonyNieJestTwoimWrogiemVisualizer({ audioRef }) {
   return (
     <canvas
       ref={canvasRef}
-      width={300}
-      height={150}
-      style={{ border: '1px solid #777', backgroundColor: 'black', marginTop: '10px' }}
+      width={window.innerWidth < 768 ? 280 : 300}
+      height={window.innerWidth < 768 ? 120 : 150}
+      style={{ border: '1px solid #777', backgroundColor: 'black', marginTop: '10px', width: '100%' }}
     />
   );
 }

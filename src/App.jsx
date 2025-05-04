@@ -6,24 +6,21 @@ import SeekBar from './components/SeekBar';
 import VolumeControl from './components/VolumeControl';
 import CominatchaVisualizer from './components/CominatchaVisualizer';
 import ZielonyNieJestTwoimWrogiemVisualizer from './components/ZielonyNieJestTwoimWrogiemVisualizer';
-import AudioVisualizer from './components/AudioVisualizer'; // Importa el AudioVisualizer
-import './App.css'; // Estilos globales si los necesitas
+import AudioVisualizer from './components/AudioVisualizer';
+import './App.css';
 
 function App() {
-  const [playlist, setPlaylist] = useState([]); // { name: string, url: string }[]
+  const [playlist, setPlaylist] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [statusText, setStatusText] = useState("Listo");
-  const [currentVisualizer, setCurrentVisualizer] = useState('default'); // Estado para la visualización actual, ahora por defecto es 'default'
+  const [currentVisualizer, setCurrentVisualizer] = useState('default');
 
-
-  const audioRef = useRef(null); // Referencia al elemento <audio>
-  const fileInputRef = useRef(null); // Referencia al input de archivo
-
-  // --- Carga y Manejo de Archivos ---
+  const audioRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
     const files = event.target.files;
@@ -41,7 +38,6 @@ function App() {
       }
     });
 
-    // Limpiar URLs viejas que ya no están en la nueva lista (si se reemplaza)
     playlist.forEach(oldTrack => {
       if (!newTracks.some(newTrack => newTrack.url === oldTrack.url) && oldTrack.url) {
         URL.revokeObjectURL(oldTrack.url);
@@ -49,24 +45,21 @@ function App() {
       }
     });
 
-    setPlaylist(newTracks); // Reemplazar la playlist con las nuevas canciones
+    setPlaylist(newTracks);
     setStatusText(`Listo. ${newTracks.length} canciones cargadas.`);
 
-    // Limpiar el input para poder cargar los mismos archivos de nuevo
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
 
-    // Si no hay nada sonando y se cargaron canciones, preparar la primera
     if (currentTrackIndex === -1 && newTracks.length > 0) {
-      setCurrentTrackIndex(0); // Preparar, pero no reproducir automáticamente
+      setCurrentTrackIndex(0);
     }
   };
 
   const handleRemoveTrack = (indexToRemove) => {
     const newPlaylist = playlist.filter((_, index) => index !== indexToRemove);
 
-    // Revocar la ObjectURL de la canción eliminada para liberar memoria
     const trackToRemove = playlist[indexToRemove];
     if (trackToRemove?.url) {
       URL.revokeObjectURL(trackToRemove.url);
@@ -75,9 +68,9 @@ function App() {
 
     setPlaylist(newPlaylist);
     if (newPlaylist.length === 0) {
-      setCurrentTrackIndex(-1); // Resetear la canción actual si la lista queda vacía
+      setCurrentTrackIndex(-1);
     } else if (indexToRemove <= currentTrackIndex && currentTrackIndex > 0) {
-      setCurrentTrackIndex(currentTrackIndex - 1); // Ajustar el índice actual si se elimina una canción anterior o la actual
+      setCurrentTrackIndex(currentTrackIndex - 1);
     }
   };
 
@@ -85,37 +78,25 @@ function App() {
     fileInputRef.current?.click();
   };
 
-  // --- Carga y Selección de Pistas ---
-
-  // Usamos useCallback para evitar recrear la función en cada render si no cambian las dependencias
   const loadTrack = useCallback((index) => {
     if (index >= 0 && index < playlist.length && audioRef.current) {
       setCurrentTrackIndex(index);
-      // La URL se actualiza en el useEffect que depende de currentTrackIndex
     }
-  }, [playlist]); // Depende de la playlist
+  }, [playlist]);
 
-
-  // --- Efecto para manejar la carga real en <audio> y limpieza ---
   useEffect(() => {
     if (currentTrackIndex >= 0 && currentTrackIndex < playlist.length && audioRef.current) {
       const trackUrl = playlist[currentTrackIndex].url;
-      const currentSrc = audioRef.current.currentSrc; // URL cargada actualmente
+      const currentSrc = audioRef.current.currentSrc;
 
-      // Solo cargar si la URL es diferente a la actual para evitar recargas innecesarias
       if (currentSrc !== trackUrl) {
         audioRef.current.src = trackUrl;
-        audioRef.current.load(); // Cargar la nueva fuente
-        // Resetear tiempo y duración visualmente hasta que carguen metadatos
+        audioRef.current.load();
         setCurrentTime(0);
         setDuration(0);
-        // Si queremos que empiece a sonar al seleccionar una nueva pista
-        // audioRef.current.play().catch(e => console.error("Error al reproducir:", e));
       }
       setStatusText(`Cargado: ${playlist[currentTrackIndex].name}`);
-
     } else if (playlist.length === 0) {
-      // Si la playlist está vacía, resetear todo
       if (audioRef.current) audioRef.current.src = '';
       setCurrentTrackIndex(-1);
       setIsPlaying(false);
@@ -123,15 +104,7 @@ function App() {
       setDuration(0);
       setStatusText("Listo");
     }
-
-    // No necesitamos limpiar (revokeObjectURL) aquí directamente,
-    // lo haremos al desmontar el componente o al cambiar la lista *completamente*.
-    // La limpieza principal de listeners está en otro useEffect.
-
-  }, [currentTrackIndex, playlist]); // Ejecutar cuando cambie el índice o la playlist
-
-
-  // --- Controles de Reproducción (Funciones) ---
+  }, [currentTrackIndex, playlist]);
 
   const handlePlayPause = () => {
     if (!audioRef.current) return;
@@ -139,15 +112,12 @@ function App() {
       audioRef.current.pause();
     } else {
       if (currentTrackIndex === -1 && playlist.length > 0) {
-        // Si no hay nada seleccionado, empieza por la primera
-        loadTrack(0); // Carga la primera pista
-        // El play real lo gatillará el evento 'canplay' o un pequeño delay
+        loadTrack(0);
         setTimeout(() => audioRef.current?.play().catch(e => console.error("Error al iniciar reproducción:", e)), 100);
       } else if (currentTrackIndex !== -1) {
         audioRef.current.play().catch(e => console.error("Error al reproducir:", e));
       }
     }
-    // setIsPlaying se actualizará mediante los eventos 'play' y 'pause' del <audio>
   };
 
   const handleStop = () => {
@@ -159,24 +129,19 @@ function App() {
 
   const handleNext = useCallback(() => {
     if (playlist.length === 0) return;
-    const nextIndex = (currentTrackIndex + 1) % playlist.length; // Loop
+    const nextIndex = (currentTrackIndex + 1) % playlist.length;
     loadTrack(nextIndex);
-    // Opcional: iniciar reproducción automáticamente al pasar a la siguiente
-    // Necesita un pequeño delay para asegurar que load() se complete
     setTimeout(() => audioRef.current?.play().catch(e => console.error("Error al reproducir next:", e)), 50);
   }, [currentTrackIndex, playlist, loadTrack]);
 
   const handlePrev = () => {
     if (playlist.length === 0) return;
-    // Si la canción lleva más de 3 segundos, la reinicia
     if (audioRef.current && audioRef.current.currentTime > 3) {
       audioRef.current.currentTime = 0;
       if (!isPlaying) audioRef.current.play().catch(e => console.error("Error al reiniciar pista:", e));
     } else {
-      // Si no, va a la anterior
-      const prevIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length; // Loop
+      const prevIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
       loadTrack(prevIndex);
-      // Opcional: iniciar reproducción automáticamente
       setTimeout(() => audioRef.current?.play().catch(e => console.error("Error al reproducir prev:", e)), 50);
     }
   };
@@ -184,16 +149,15 @@ function App() {
   const handleSeek = (eventOrValue) => {
     let value;
     if (typeof eventOrValue === 'object' && eventOrValue.target) {
-      value = parseFloat(eventOrValue.target.value); // From range input event
+      value = parseFloat(eventOrValue.target.value);
     } else {
-      value = parseFloat(eventOrValue); // Directly passed value
+      value = parseFloat(eventOrValue);
     }
     if (audioRef.current && !isNaN(value)) {
       audioRef.current.currentTime = value;
-      setCurrentTime(value); // Update state immediately for responsiveness
+      setCurrentTime(value);
     }
   };
-
 
   const handleVolumeChange = (event) => {
     const newVolume = parseFloat(event.target.value);
@@ -205,12 +169,9 @@ function App() {
 
   const handleTrackSelect = (index) => {
     loadTrack(index);
-    // Reproducir automáticamente al seleccionar de la lista
     setTimeout(() => audioRef.current?.play().catch(e => console.error("Error al reproducir selección:", e)), 50);
   };
 
-
-  // --- Efecto para añadir y limpiar listeners del <audio> ---
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -219,19 +180,15 @@ function App() {
     const updatePauseState = () => setIsPlaying(false);
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
-    const handleTrackEnd = () => handleNext(); // Llama a la función next definida arriba
+    const handleTrackEnd = () => handleNext();
 
-    // Añadir listeners
     audio.addEventListener('play', updatePlayState);
     audio.addEventListener('pause', updatePauseState);
     audio.addEventListener('ended', handleTrackEnd);
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateDuration);
-    // También actualizar duración si cambia la fuente (loadedmetadata no siempre salta)
     audio.addEventListener('durationchange', updateDuration);
 
-    // Función de limpieza: se ejecuta cuando el componente se desmonta
-    // o antes de que el efecto se vuelva a ejecutar si cambian sus dependencias
     return () => {
       audio.removeEventListener('play', updatePlayState);
       audio.removeEventListener('pause', updatePauseState);
@@ -240,29 +197,21 @@ function App() {
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('durationchange', updateDuration);
     };
-  }, [handleNext]); // Re-attach listeners if handleNext changes (due to playlist change)
+  }, [handleNext]);
 
-  // --- Efecto para limpiar Object URLs ---
   useEffect(() => {
-    // Guardamos las URLs actuales en el momento que el efecto se monta o actualiza
     const urlsToManage = playlist.map(track => track.url);
-
-    // La función de limpieza se ejecuta cuando el componente se desmonta
-    // o cuando la 'playlist' cambia antes de ejecutar el efecto de nuevo
     return () => {
       console.log("Limpiando URLs para playlist anterior...");
       urlsToManage.forEach(url => {
-        // Solo revocar si la URL existe (para evitar errores si el array tiene elementos sin URL)
         if (url) {
           URL.revokeObjectURL(url);
-          console.log("Revoked:", url.substring(url.length - 10)); // Log corto
+          console.log("Revoked:", url.substring(url.length - 10));
         }
       });
     };
-  }, [playlist]); // Depende de la playlist
+  }, [playlist]);
 
-
-  // --- Formato de Tiempo ---
   const formatTime = (seconds) => {
     if (isNaN(seconds) || seconds === Infinity) return '0:00';
     const minutes = Math.floor(seconds / 60);
@@ -270,89 +219,79 @@ function App() {
     return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  const switchToCominatcha = () => {
+    setCurrentVisualizer('cominatcha');
+  };
 
-    // --- Funciones para cambiar la visualización ---
-    const switchToCominatcha = () => {
-      setCurrentVisualizer('cominatcha');
-    };
-  
-    const switchToZielony = () => {
-      setCurrentVisualizer('zielony');
-    };
+  const switchToZielony = () => {
+    setCurrentVisualizer('zielony');
+  };
 
-    const switchToDefaultVisualizer = () => {
-      setCurrentVisualizer('default');
-    };
+  const switchToDefaultVisualizer = () => {
+    setCurrentVisualizer('default');
+  };
 
-
-  // --- Renderizado ---
   return (
     <div className="App">
-    <audio ref={audioRef} />
-    <input
-      type="file"
-      accept=".mp3"
-      multiple
-      ref={fileInputRef}
-      onChange={handleFileChange}
-      style={{ display: 'none' }}
-    />
-
-    <XPWindow
-      title="Yin Yang Music ☯"
-      onClose={() => console.log("Cerrar")}
-      onMinimize={() => console.log("Minimizar")}
-      onMaximize={() => console.log("Maximizar")}
-    >
-      <div style={{ display: 'flex', gap: '15px' }}>
-        <Playlist
-          tracks={playlist}
-          currentTrackIndex={currentTrackIndex}
-          onTrackSelect={handleTrackSelect}
-          onLoadClick={triggerFileInput}
-          onRemoveTrack={handleRemoveTrack}
-        />
-        <div style={{ flex: 2, display: 'flex', flexDirection: 'column'}}>
-          <div style={{ padding: '10px', textAlign: 'center', minHeight: '30px', border: '1px solid #ccc', marginBottom: '10px'}}>
-            {currentTrackIndex !== -1 ? playlist[currentTrackIndex]?.name : "Nada reproduciendo..."}
+      <audio ref={audioRef} />
+      <input
+        type="file"
+        accept=".mp3"
+        multiple
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+      />
+      <XPWindow
+        title="Yin Yang Music ☯"
+        onClose={() => console.log("Cerrar")}
+        onMinimize={() => console.log("Minimizar")}
+        onMaximize={() => console.log("Maximizar")}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <Playlist
+            tracks={playlist}
+            currentTrackIndex={currentTrackIndex}
+            onTrackSelect={handleTrackSelect}
+            onLoadClick={triggerFileInput}
+            onRemoveTrack={handleRemoveTrack}
+          />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '0 10px' }}>
+            <div style={{ padding: '10px', textAlign: 'center', minHeight: '30px', border: '1px solid #ccc' }}>
+              {currentTrackIndex !== -1 ? playlist[currentTrackIndex]?.name : "Nada reproduciendo..."}
+            </div>
+            <PlayerControls
+              isPlaying={isPlaying}
+              onPlayPause={handlePlayPause}
+              onStop={handleStop}
+              onNext={handleNext}
+              onPrev={handlePrev}
+            />
+            <SeekBar
+              currentTime={currentTime}
+              duration={duration}
+              onSeek={handleSeek}
+              formatTime={formatTime}
+            />
+            <VolumeControl
+              volume={volume}
+              onVolumeChange={handleVolumeChange}
+            />
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button onClick={switchToCominatcha} className="xp-button-general">Cominatcha</button>
+              <button onClick={switchToZielony} className="xp-button-general">Zielony</button>
+              <button onClick={switchToDefaultVisualizer} className="xp-button-general">Default</button>
+            </div>
+            {currentVisualizer === 'cominatcha' && <CominatchaVisualizer audioRef={audioRef} />}
+            {currentVisualizer === 'zielony' && <ZielonyNieJestTwoimWrogiemVisualizer audioRef={audioRef} />}
+            {currentVisualizer === 'default' && <AudioVisualizer audioRef={audioRef} />}
           </div>
-          <PlayerControls
-            isPlaying={isPlaying}
-            onPlayPause={handlePlayPause}
-            onStop={handleStop}
-            onNext={handleNext}
-            onPrev={handlePrev}
-          />
-          <SeekBar
-            currentTime={currentTime}
-            duration={duration}
-            onSeek={handleSeek}
-            formatTime={formatTime}
-          />
-          <VolumeControl
-            volume={volume}
-            onVolumeChange={handleVolumeChange}
-          />
-
-          {/* Controles para cambiar la visualización */}
-          <div style={{ display: 'flex', gap: '10px', marginTop: '10px', justifyContent: 'center' }}>
-            <button onClick={switchToCominatcha} className="xp-button-general">Cominatcha</button>
-            <button onClick={switchToZielony} className="xp-button-general">Zielony</button>
-            <button onClick={switchToDefaultVisualizer} className="xp-button-general">Default</button>
-          </div>
-
-          {/* Renderizado condicional de la visualización */}
-          {currentVisualizer === 'cominatcha' && <CominatchaVisualizer audioRef={audioRef} />}
-          {currentVisualizer === 'zielony' && <ZielonyNieJestTwoimWrogiemVisualizer audioRef={audioRef} />}
-          {currentVisualizer === 'default' && <AudioVisualizer audioRef={audioRef} />}
-
         </div>
-      </div>
-      <div className="status-bar" style={{ background:'#f0f0f0', borderTop: '1px solid #ccc', padding: '3px 8px', fontSize: '11px', color: '#555', marginTop: '10px' }}>
-        {statusText}
-      </div>
-    </XPWindow>
-  </div>
+        <div className="status-bar" style={{ background: '#f0f0f0', borderTop: '1px solid #ccc', padding: '3px 8px', fontSize: '11px', color: '#555' }}>
+          {statusText}
+        </div>
+      </XPWindow>
+    </div>
   );
 }
 

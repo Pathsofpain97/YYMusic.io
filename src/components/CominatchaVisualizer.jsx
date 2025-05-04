@@ -15,7 +15,7 @@ function CominatchaVisualizer({ audioRef }) {
       const canvasCtx = canvas.getContext('2d');
       const width = canvas.width;
       const height = canvas.height;
-      const numLines = 30; // Número de líneas a dibujar
+      const numLines = 30;
       const lineSpacing = width / (numLines + 1);
       const centerY = height / 2;
 
@@ -27,12 +27,11 @@ function CominatchaVisualizer({ audioRef }) {
         canvasCtx.clearRect(0, 0, width, height);
 
         canvasCtx.lineWidth = 2;
-        canvasCtx.strokeStyle = 'cyan'; // Color inicial de las líneas
+        canvasCtx.strokeStyle = 'cyan';
 
         for (let i = 0; i < numLines; i++) {
           const x = (i + 1) * lineSpacing;
-          // Obtener un valor del array de datos y normalizarlo
-          const amplitude = (dataArray[Math.floor(i * dataArray.length / numLines)] / 128.0) * 50; // Ajustar el factor
+          const amplitude = (dataArray[Math.floor(i * dataArray.length / numLines)] / 128.0) * 50;
 
           canvasCtx.beginPath();
           canvasCtx.moveTo(x, centerY - amplitude);
@@ -76,9 +75,9 @@ function CominatchaVisualizer({ audioRef }) {
   return (
     <canvas
       ref={canvasRef}
-      width={300}
-      height={150}
-      style={{ border: '1px solid #555', backgroundColor: 'black', marginTop: '10px' }}
+      width={window.innerWidth < 768 ? 280 : 300}
+      height={window.innerWidth < 768 ? 120 : 150}
+      style={{ border: '1px solid #555', backgroundColor: 'black', marginTop: '10px', width: '100%' }}
     />
   );
 }

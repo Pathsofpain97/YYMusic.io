@@ -22,7 +22,7 @@ function AudioVisualizer({ audioRef }) {
         const width = canvas.width;
         const height = canvas.height;
 
-        canvasCtx.clearRect(0, 0, width, height); // Limpiar el canvas
+        canvasCtx.clearRect(0, 0, width, height);
 
         analyser.getByteTimeDomainData(dataArray);
 
@@ -63,13 +63,12 @@ function AudioVisualizer({ audioRef }) {
         }
       };
 
-      if (audio.readyState >= 2) { // Asegurarse de que el audio esté cargado parcialmente al menos
+      if (audio.readyState >= 2) {
         setupAudio();
       } else {
         audio.addEventListener('loadeddata', setupAudio);
       }
 
-      // Limpieza al desmontar el componente
       return () => {
         if (audio) {
           audio.removeEventListener('loadeddata', setupAudio);
@@ -84,9 +83,9 @@ function AudioVisualizer({ audioRef }) {
   return (
     <canvas
       ref={canvasRef}
-      width={300} // Puedes ajustar el ancho
-      height={100} // Puedes ajustar la altura
-      style={{ border: '1px solid #ccc', marginTop: '10px' }}
+      width={window.innerWidth < 768 ? 280 : 300} // Ajusta ancho para móviles
+      height={window.innerWidth < 768 ? 80 : 100} // Ajusta altura para móviles
+      style={{ border: '1px solid #ccc', marginTop: '10px', width: '100%' }}
     />
   );
 }
