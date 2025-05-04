@@ -30,11 +30,11 @@ function App() {
     const newTracks = [];
 
     Array.from(files).forEach(file => {
-      if (file.type === 'audio/mpeg') {
+      if (file.type.startsWith('audio/')) {
         const objectURL = URL.createObjectURL(file);
         newTracks.push({ name: file.name, url: objectURL });
       } else {
-        console.warn(`Archivo ${file.name} no es MP3, omitido.`);
+        console.warn(`Archivo ${file.name} (${file.type}) no es un tipo de audio compatible, omitido.`);
       }
     });
 
@@ -236,7 +236,7 @@ function App() {
       <audio ref={audioRef} />
       <input
         type="file"
-        accept=".mp3"
+        accept="audio/*"
         multiple
         ref={fileInputRef}
         onChange={handleFileChange}
