@@ -53,6 +53,7 @@ function AudioVisualizer({ audioRef }) {
       };
 
       const setupAudio = () => {
+        if (!audioRef.current || audioContext) return; // Añadido check para audioRef.current
         if (!audioContext) {
           audioContext = new (window.AudioContext || window.webkitAudioContext)();
           source = audioContext.createMediaElementSource(audio);

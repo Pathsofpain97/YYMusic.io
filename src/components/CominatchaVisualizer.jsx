@@ -43,6 +43,7 @@ function CominatchaVisualizer({ audioRef }) {
       };
 
       const setupAudio = () => {
+        if (!audioRef.current || audioContext) return;
         if (!audioContext) {
           audioContext = new (window.AudioContext || window.webkitAudioContext)();
           source = audioContext.createMediaElementSource(audio);
