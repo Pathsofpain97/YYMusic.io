@@ -219,15 +219,21 @@ function App() {
     return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  const switchToCominatcha = () => {
+  const switchToCominatcha = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setCurrentVisualizer('cominatcha');
   };
 
-  const switchToZielony = () => {
+  const switchToZielony = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setCurrentVisualizer('zielony');
   };
 
-  const switchToDefaultVisualizer = () => {
+  const switchToDefaultVisualizer = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setCurrentVisualizer('default');
   };
 
