@@ -34,7 +34,7 @@ function Playlist({ tracks = [], currentTrackIndex = -1, onTrackSelect, onLoadCl
         )}
       </ul>
       <button onClick={onLoadClick} className={`${styles.loadButton} xp-button-general`}>
-        Cargar Archivos MP3
+        Cargar Archivos MP3/Audio Disfruta!
       </button>
     </div>
   );
