@@ -1,0 +1,50 @@
+/* src/index.css o src/App.css */
+:root {
+    --xp-blue: #0055E1; /* Azul de barra de título */
+    --xp-blue-gradient-start: #0443AE;
+    --xp-blue-gradient-end: #46A3FF;
+    --xp-window-bg: #ECE9D8; /* Fondo de ventana */
+    --xp-button-bg: #F5F5F5;
+    --xp-button-border: #7F9DB9;
+    --xp-text-color: #000000;
+    --xp-font: 'Tahoma', sans-serif; /* Fuente común en XP */
+    --xp-dark-grey-border: #707070;
+    --xp-light-grey-border: #B5B5B5;
+    --xp-highlight-blue: #316AC5;
+    --xp-highlight-text: white;
+  }
+  
+  body {
+    font-family: var(--xp-font);
+    background-color: #3A6EA5; /* Fondo escritorio XP (opcional) */
+    margin: 0;
+    padding: 20px; /* Añade algo de espacio */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinea arriba */
+    min-height: 100vh;
+  }
+  
+  /* Estilos generales para botones si no se usa módulo para todos */
+  .xp-button-general {
+      background-color: var(--xp-button-bg);
+      border: 1px solid var(--xp-button-border);
+      border-radius: 3px;
+      padding: 5px 15px;
+      cursor: pointer;
+      font-family: var(--xp-font);
+      font-size: 12px;
+      min-width: 75px;
+      height: 23px; /* Altura típica XP */
+      text-align: center;
+      box-sizing: border-box;
+  }
+  
+  .xp-button-general:hover {
+      border-color: #1C65B2;
+  }
+  .xp-button-general:active {
+      background-color: #E1E1E1;
+      border-style: inset;
+      padding: 6px 14px 4px 16px; /* Simular hundido */
+  }

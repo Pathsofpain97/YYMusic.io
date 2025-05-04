@@ -1,0 +1,78 @@
+.progressContainer {
+    width: 95%; /* Casi todo el ancho */
+    display: flex;
+    align-items: center;
+    margin: 15px auto 10px auto; /* Centrado con margen */
+    gap: 8px;
+  }
+  
+  .timeDisplay {
+    font-size: 11px;
+    min-width: 35px; /* Espacio para MM:SS */
+    text-align: center;
+    color: #333;
+    user-select: none;
+  }
+  
+  /* Estilización del input range (la parte más compleja y dependiente del navegador) */
+  .seekBar {
+    flex-grow: 1;
+    cursor: pointer;
+    appearance: none; /* Quita estilo por defecto */
+    width: 100%; /* Ocupa el espacio restante */
+    height: 6px; /* Alto de la barra */
+    background: var(--xp-light-grey-border); /* Fondo de la barra */
+    border: 1px solid var(--xp-dark-grey-border);
+    border-radius: 3px;
+    outline: none;
+  }
+  .seekBar:disabled {
+      background: #e0e0e0; /* Gris claro si está deshabilitado */
+      cursor: default;
+  }
+  
+  
+  /* --- Estilo del "pulgar" (la bolita) --- */
+  
+  /* WebKit (Chrome, Safari, Edge, Opera) */
+  .seekBar::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px; /* Ancho del pulgar */
+    height: 18px; /* Alto del pulgar */
+    background: var(--xp-button-bg); /* Color del pulgar */
+    border: 1px solid var(--xp-button-border);
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: -7px; /* Ajuste vertical para centrar en la barra de 6px */
+  }
+  .seekBar:disabled::-webkit-slider-thumb {
+      background: #bdbdbd;
+      cursor: default;
+  }
+  
+  /* Firefox */
+  .seekBar::-moz-range-thumb {
+    width: 14px;
+    height: 18px;
+    background: var(--xp-button-bg);
+    border: 1px solid var(--xp-button-border);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .seekBar:disabled::-moz-range-thumb {
+      background: #bdbdbd;
+      cursor: default;
+  }
+  
+  /* --- Estilo del "track" (la barra) --- */
+  /* (Opcional, para más control, pero el fondo base suele ser suficiente) */
+  
+  /* Firefox track */
+  .seekBar::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: var(--xp-light-grey-border);
+    border: 1px solid var(--xp-dark-grey-border);
+    border-radius: 3px;
+  }

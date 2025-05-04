@@ -1,0 +1,57 @@
+
+/* Reutiliza los colores y fuentes base definidos en App.css o :root global */
+:root {
+    --xp-blue: #0055E1;
+    --xp-window-bg: #ECE9D8;
+    --xp-button-bg: #F5F5F5;
+    --xp-button-border: #7F9DB9;
+    --xp-font: 'Tahoma', sans-serif;
+}
+
+.controlsContainer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.xpButton {
+    background-color: var(--xp-button-bg);
+    border: 1px solid var(--xp-button-border);
+    border-radius: 3px;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-family: var(--xp-font);
+    font-size: 12px;
+    min-width: 40px; /* Ajusta según necesites */
+    height: 30px;
+    text-align: center;
+}
+
+.xpButton:hover {
+    border-color: #1C65B2;
+}
+.xpButton:active {
+    background-color: #E1E1E1;
+    border-style: inset;
+}
+
+/* Estilos para iconos (usando contenido o background-image) */
+.controlIcon {
+    width: 40px; /* O el tamaño que prefieras */
+    height: 30px;
+    padding: 0;
+    font-size: 16px; /* Ajusta si usas texto/emojis */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Si usas background-image, configúralo aquí */
+}
+
+.controlIcon.play::before { content: '▶️'; }
+.controlIcon.pause::before { content: '⏸️'; }
+.controlIcon.stop::before { content: '⏹️'; }
+.controlIcon.prev::before { content: '⏮️'; }
+.controlIcon.next::before { content: '⏭️'; }
+
+/* ... otros estilos que necesites ... */
